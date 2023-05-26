@@ -9,7 +9,9 @@ from sqlalchemy import pool
 from alembic import context
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.models import investor
+from app.db.base import Base
+from app.models import investor, address, investor_account, investor_document, investor_fund
+
 load_dotenv()
 
 # this is the Alembic Config object, which provides
@@ -28,7 +30,7 @@ config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = investor.Base.metadata
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
