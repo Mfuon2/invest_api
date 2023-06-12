@@ -18,7 +18,6 @@ load_dotenv()
 # access to the values within the .ini file in use.
 config = context.config
 
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -31,6 +30,7 @@ config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -53,6 +53,7 @@ def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
+        compare_type=True,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -63,7 +64,11 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection):
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        compare_type=True,
+        target_metadata=target_metadata
+    )
 
     with context.begin_transaction():
         context.run_migrations()

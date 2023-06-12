@@ -1,0 +1,59 @@
+version: "3.3"
+
+services:
+#  mysql-server:
+#    image: mysql:8.0.19
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: secret
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#    ports:
+#      - "33061:33061"
+#
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin:5.1.1
+#    restart: always
+#    environment:
+#      PMA_HOST: mysql-server
+#      PMA_USER: ${PMA_USER}
+#      PMA_PASSWORD: ${PMA_PASSWORD}
+#      UPLOAD_LIMIT: 256M
+#      MAX_EXECUTION_TIME: 0
+#    ports:
+#      - "8080:80"
+#    volumes:
+#      - ./database/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+
+  postgres_db:
+    container_name: invest_db
+    image: postgres:latest
+    restart: always
+    ports:
+      - "32768:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: invest_dbadmin
+    depends_on:
+      - postgres_db
+    image: dpage/pgadmin4:latest
+    restart: always
+    ports:
+      - "5556:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+
+volumes:
+#  mysql-data:
+  postgres:
+  pgadmin:

@@ -1,11 +1,7 @@
-from logging.config import dictConfig
 import logging
+from logging.config import dictConfig
 
-from fastapi import FastAPI, Request
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import RequestValidationError
-from starlette import status
-from starlette.responses import JSONResponse
+from fastapi import FastAPI
 
 from app.configs.logger import LogConfig
 from app.controllers.investor_controller import router as investor_router

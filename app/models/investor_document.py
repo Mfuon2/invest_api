@@ -7,6 +7,7 @@ from app.db.base import Base
 
 class InvestorDocument(Base):
     __tablename__ = 'documents'
+
     id = Column(Integer, primary_key=True)
     document_type = Column(String)
     document_url = Column(String)
