@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import async_session, AsyncSession
 from app.configs.custom_response import get_fail
 from app.db.session import get_session, engine
 from app.models.investor import Investor
-from app.shemas.investor import InvestorCreate
+from app.schemas.investor import InvestorCreate
 
 
 async def get_one(investor_id: int, db: AsyncSession) -> Investor:

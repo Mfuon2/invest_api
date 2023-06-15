@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.configs.custom_response import get_success, get_fail, upsert_success
 from app.repositories.investor_repository import get_one, create
-from app.shemas.investor import InvestorRead, InvestorCreate
+from app.schemas.investor import InvestorRead, InvestorCreate
 
 
 async def get_investor(investor_id: int, db: AsyncSession) -> Any:

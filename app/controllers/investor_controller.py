@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 from app.configs.custom_response import get_success
 from app.db.session import get_session
 from app.services.investor_service import get_investor, create_investor
-from app.shemas.investor import InvestorCreate, InvestorRead
+from app.schemas.investor import InvestorCreate, InvestorRead
 
 router = APIRouter(prefix='/investor', tags=['Investor'])
 

@@ -6,6 +6,9 @@ from pydantic.schema import date, datetime
 
 class InvestorBase(BaseModel):
     id: Optional[int]
+
+
+class InvestorCreate(InvestorBase):
     mobile: str
     fullname: str
     email: str
@@ -16,10 +19,6 @@ class InvestorBase(BaseModel):
     created_at = datetime
     updated_at = datetime
     tax_number = str
-
-
-class InvestorCreate(InvestorBase):
-    mobile: str
 
 
 class InvestorUpdate(InvestorBase):
