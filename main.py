@@ -1,15 +1,22 @@
 import logging
 from logging.config import dictConfig
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
+from starlette.responses import JSONResponse
+from tortoise.contrib.fastapi import register_tortoise
+from tortoise.exceptions import BaseORMException, ValidationError
 
+from app.configs.custom_response import get_fail
 from app.configs.logger import LogConfig
-from app.controllers.investor_controller import router as investor_router
-from app.db.session import init_db
+from app.controllers.accounts_controller import accounts_routes
+from app.controllers.investor_controller import investor_routes
+from app.db.session import DATABASE_URL
 
 app = FastAPI(title='Invest', description='Description comes here', version='1.0')
-
-app.include_router(investor_router)
+app.include_router(investor_routes)
+app.include_router(accounts_routes)
 dictConfig(LogConfig().dict())
 log = logging.getLogger("logger")
 
@@ -17,13 +24,19 @@ log = logging.getLogger("logger")
 @app.on_event("startup")
 async def on_startup():
     log.info(f'Application Starting...')
-    await init_db()
+    # await init_db()
 
 
-# @app.exception_handler(RequestValidationError)
-# async def validation_exception_handler(request: Request, exc: RequestValidationError):
-#     log.error(exc.json())
-#     return JSONResponse(
-#         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-#         content=jsonable_encoder({"data": exc.errors(), "Error": "Name field is missing"}),
-#     )
+
+register_tortoise(
+    app,
+    db_url=DATABASE_URL,
+    modules={"models":
+                 [
+                     "app.models.investor_account",
+                     "app.models.investor"
+                 ]
+             },
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
