@@ -1,29 +1,36 @@
 from datetime import datetime
+from enum import Enum
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-
-from app.db.base import Base
-from app.models.address import Address
-from app.models.investor_account import InvestorAccount
-from app.models.investor_document import InvestorDocument
+from tortoise import Model
+from tortoise.fields import IntField, UUIDField, TextField, CharField, DatetimeField, DateField, CharEnumField, \
+    ReverseRelation
 
 
-class Investor(Base):
-    __tablename__ = "investors"
+class IdentityType(str, Enum):
+    PASSPORT = 'PASSPORT'
+    ID = 'NATIONAL ID'
+    ALIEN= 'ALIEN'
 
-    id = Column(Integer, primary_key=True, index=True)
-    fullname = Column(String, index=True)
-    email = Column(String, index=True)
-    mobile = Column(String, index=True)
-    code = Column(String)
-    identity = Column(String)
-    identity_type = Column(String)
-    date_of_birth = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
-    tax_number = Column(String)
-    addresses = relationship(Address, cascade="all, delete-orphan", backref='investor_addresses')
-    documents = relationship(InvestorDocument, cascade="all, delete-orphan", backref='investor_documents')
-    accounts = relationship(InvestorAccount, cascade="all, delete-orphan", backref='investor_accounts')
+
+class Investor(Model):
+    id = UUIDField(pk=True, index=True)
+    fullname = CharField(max_length=20, null=False)
+    email = CharField(max_length=20, null=False)
+    mobile = CharField(max_length=20,null=False)
+    code = CharField(max_length=8, null=False)
+    identity = CharField(max_length=8, null=False)
+    identity_type = CharEnumField(enum_type=IdentityType)
+    date_of_birth = DateField(null=False)
+    created_at = DatetimeField(auto_now_add=True, default=datetime.utcnow())
+    updated_at = DatetimeField(auto_now=True, default=datetime.utcnow())
+    tax_number = CharField(null=False, max_length=11)
+    accounts = ReverseRelation['InvestorAccount']
+    # addresses = relationship(Address, cascade="all, delete-orphan", backref='investor_addresses')
+    # documents = relationship(InvestorDocument, cascade="all, delete-orphan", backref='investor_documents')
+    # accounts = relationship(InvestorAccount, cascade="all, delete-orphan", backref='investor_accounts'
+
+    class Meta:
+        table = 'investors'
+
+
 
