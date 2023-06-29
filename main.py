@@ -27,16 +27,15 @@ async def on_startup():
     # await init_db()
 
 
-
 register_tortoise(
     app,
     db_url=DATABASE_URL,
     modules={"models":
-                 [
-                     "app.models.investor_account",
-                     "app.models.investor"
-                 ]
-             },
+        [
+            "app.models.models"
+        ]
+    },
+
     generate_schemas=True,
     add_exception_handlers=True,
 )

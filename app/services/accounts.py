@@ -1,7 +1,7 @@
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from app.configs.custom_response import get_success
-from app.models.investor_account import InvestorAccount
+from app.models.models import InvestorAccount
 
 dto = pydantic_model_creator(InvestorAccount)
 createDto = pydantic_model_creator(InvestorAccount, exclude_readonly=True)
