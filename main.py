@@ -27,6 +27,7 @@ async def on_startup():
     # await init_db()
 
 
+
 register_tortoise(
     app,
     db_url=DATABASE_URL,

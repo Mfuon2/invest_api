@@ -1,10 +1,16 @@
+from pydantic import BaseConfig
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from app.configs.custom_response import get_success
 from app.models.models import InvestorAccount
 
-dto = pydantic_model_creator(InvestorAccount)
-createDto = pydantic_model_creator(InvestorAccount, exclude_readonly=True)
+
+class Config(BaseConfig):
+    extra = "allow"
+
+
+dto = pydantic_model_creator(InvestorAccount, config_class=Config)
+createDto = pydantic_model_creator(InvestorAccount, config_class=Config)
 
 
 async def get_accounts_service():
